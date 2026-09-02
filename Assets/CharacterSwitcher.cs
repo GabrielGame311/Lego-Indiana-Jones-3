@@ -22,6 +22,8 @@ public class CharacterSwitcher : MonoBehaviour
     public GameObjectBlinker player2Indicator;    
     private bool isControllingPlayer1 = true;
     private bool isSwitching = false;
+    public AudioClip SwitchSound;
+
 
     void Start()
     {
@@ -40,7 +42,10 @@ public class CharacterSwitcher : MonoBehaviour
 {
     isSwitching = true;
 
-    
+    if (SwitchSound != null)
+    {
+        GameObject.FindObjectOfType<AudioSource>().PlayOneShot(SwitchSound);
+    }
 
     // 1. Skapa flygande trail-objektet
     GameObject fromPlayer = isControllingPlayer1 ? player1 : player2;
