@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(AudioSource))] // Skapar automatiskt en AudioSource om det saknas
+[RequireComponent(typeof(AudioSource))]
 public class LegoBuildSite : MonoBehaviour
 {
     [Header("Byggbitar")]
@@ -19,11 +19,11 @@ public class LegoBuildSite : MonoBehaviour
     public float interactDistance = 3.5f;
 
     [Header("Slutanimation (Upp & Ner)")]
-    public float finishJumpHeight = 0.6f; // Hur högt hela spaken hoppar när den är klar
-    public float finishJumpSpeed = 3.0f;  // Hur snabbt hoppet sker
+    public float finishJumpHeight = 0.6f; 
+    public float finishJumpSpeed = 3.0f;  
 
     [Header("Ljud & Effekter")]
-    public AudioClip buildSound;
+    public AudioClip buildSound;         
     public AudioClip completeSound;      
     public ParticleSystem completeEffect; 
 
@@ -33,13 +33,16 @@ public class LegoBuildSite : MonoBehaviour
     private bool isBuilding = false;
 
     private int currentBrickIndex = 0;
-    private AudioSource audioSource; // Egen dedikerad AudioSource för byggplatsen
+    private AudioSource audioSource;
+    private Animator playerAnimator;
 
     void Start()
     {
-        // Hämta eller skapa AudioSource
+        // Konfigurera AudioSource
         audioSource = GetComponent<AudioSource>();
-        audioSource.spatialBlend = 0f; // Sätt till 0 för 2D-ljud (hörs tydligt), eller 1.0f för 3D-ljud
+        //audioSource.spatialBlend = 1.0f; // 3D-ljud
+        audioSource.volume = 1.0f;
+        audioSource.playOnAwake = false;
 
         foreach (Transform brick in looseBricks)
         {
@@ -93,28 +96,47 @@ public class LegoBuildSite : MonoBehaviour
             if (health != null) player = health.gameObject;
         }
 
-        if (player == null) return;
+        if (player == null)
+        {
+            SetPlayerBuildingAnimation(false);
+            return;
+        }
+
+        // Hämta animatören från spelaren eller en av dess undermappar/children
+        if (playerAnimator == null || playerAnimator.gameObject != player)
+        {
+            playerAnimator = player.GetComponentInChildren<Animator>();
+        }
 
         float dist = Vector3.Distance(transform.position, player.transform.position);
 
+        // Håll inne knappen inom räckvidd
         if (dist <= interactDistance && Input.GetKey(buildKey))
         {
+            SetPlayerBuildingAnimation(true);
+
             if (!isBuilding && currentBrickIndex < looseBricks.Count)
             {
                 StartCoroutine(BuildNextBrick());
             }
+        }
+        else
+        {
+            SetPlayerBuildingAnimation(false);
+        }
+    }
+
+    void SetPlayerBuildingAnimation(bool building)
+    {
+        if (playerAnimator != null)
+        {
+            playerAnimator.SetBool("Build", building);
         }
     }
 
     IEnumerator BuildNextBrick()
     {
         isBuilding = true;
-
-        // Spela byggljudet direkt när en ny kloss påbörjar sitt lyft
-        if (buildSound != null && audioSource != null)
-        {
-            audioSource.PlayOneShot(buildSound);
-        }
 
         Transform currentLoose = looseBricks[currentBrickIndex];
         Transform targetPart = (currentBrickIndex < leverParts.Count) ? leverParts[currentBrickIndex] : completedLever.transform;
@@ -128,9 +150,11 @@ public class LegoBuildSite : MonoBehaviour
 
         while (elapsed < timePerBrick)
         {
+            // Om spelaren släpper knappen mitt i en flygning
             if (!Input.GetKey(buildKey))
             {
                 isBuilding = false;
+                SetPlayerBuildingAnimation(false);
                 yield break;
             }
 
@@ -146,6 +170,7 @@ public class LegoBuildSite : MonoBehaviour
             yield return null;
         }
 
+        // Klossen landar och snäpper fast
         currentLoose.gameObject.SetActive(false);
 
         if (currentBrickIndex < leverParts.Count)
@@ -154,8 +179,14 @@ public class LegoBuildSite : MonoBehaviour
             StartCoroutine(PopScaleEffect(leverParts[currentBrickIndex]));
         }
 
+        if (buildSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(buildSound);
+        }
+
         currentBrickIndex++;
 
+        // När hela bygget är färdigt
         if (currentBrickIndex >= looseBricks.Count || currentBrickIndex >= leverParts.Count)
         {
             StartCoroutine(FinishBuildAnimation());
@@ -168,6 +199,9 @@ public class LegoBuildSite : MonoBehaviour
     {
         isCompleted = true;
 
+        // Sluta spela spelarens bygganimation direkt
+        SetPlayerBuildingAnimation(false);
+
         foreach (Transform part in leverParts)
         {
             if (part != null) part.gameObject.SetActive(true);
@@ -177,7 +211,6 @@ public class LegoBuildSite : MonoBehaviour
             if (brick != null) brick.gameObject.SetActive(false);
         }
 
-        // Spela klart-ljudet
         if (completeSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(completeSound);
@@ -188,7 +221,7 @@ public class LegoBuildSite : MonoBehaviour
             completeEffect.Play();
         }
 
-        // --- Upp-och-ner animation på hela spaken ---
+        // Slutanimation på spaken (lyfts upp och landar)
         Vector3 basePosition = completedLever.transform.localPosition;
         float elapsed = 0f;
         float duration = 0.4f;

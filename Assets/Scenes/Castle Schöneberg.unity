@@ -1913,7 +1913,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 34
+  m_RootOrder: 35
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &335256042
 MeshCollider:
@@ -4055,7 +4055,6 @@ GameObject:
   m_Component:
   - component: {fileID: 551869009}
   - component: {fileID: 551869012}
-  - component: {fileID: 551869011}
   - component: {fileID: 551869010}
   m_Layer: 0
   m_Name: Camera
@@ -4112,14 +4111,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &551869011
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 551869008}
-  m_Enabled: 1
 --- !u!20 &551869012
 Camera:
   m_ObjectHideFlags: 0
@@ -5225,7 +5216,7 @@ PrefabInstance:
     - target: {fileID: 7650844627614880312, guid: 2f7949e571087ce45b59ad38cfdd6377,
         type: 3}
       propertyPath: jumpHeight
-      value: 1.5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7650844627614880312, guid: 2f7949e571087ce45b59ad38cfdd6377,
         type: 3}
@@ -13922,7 +13913,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 41
+  m_RootOrder: 42
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &895528885
 MeshCollider:
@@ -15292,7 +15283,7 @@ PrefabInstance:
     - target: {fileID: 1291440319094527741, guid: 19f428de8b857124881e354dd570417c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 42
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 1291440319094527741, guid: 19f428de8b857124881e354dd570417c,
         type: 3}
@@ -25388,7 +25379,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 43
+  m_RootOrder: 44
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1687702044
 MeshCollider:
@@ -36050,7 +36041,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2060116686}
   - component: {fileID: 2060116689}
-  - component: {fileID: 2060116688}
   - component: {fileID: 2060116687}
   m_Layer: 0
   m_Name: Camera
@@ -36107,14 +36097,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &2060116688
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060116685}
-  m_Enabled: 1
 --- !u!20 &2060116689
 Camera:
   m_ObjectHideFlags: 0
@@ -36868,7 +36850,7 @@ PrefabInstance:
     - target: {fileID: 1128203284580490667, guid: a9400ce7152c31e42a42e2032c4f1073,
         type: 3}
       propertyPath: m_RootOrder
-      value: 35
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 1128203284580490667, guid: a9400ce7152c31e42a42e2032c4f1073,
         type: 3}
@@ -37064,7 +37046,7 @@ PrefabInstance:
     - target: {fileID: 8278295450709645347, guid: c21dba3837cd34247a0e2dd8694e511a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 44
+      value: 43
       objectReference: {fileID: 0}
     - target: {fileID: 8278295450709645347, guid: c21dba3837cd34247a0e2dd8694e511a,
         type: 3}
@@ -37284,7 +37266,7 @@ PrefabInstance:
     - target: {fileID: 6093509104420300652, guid: 429e95af4e32db64c9480dc21dbcb789,
         type: 3}
       propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7224648515708715196, guid: 429e95af4e32db64c9480dc21dbcb789,
         type: 3}
@@ -38013,7 +37995,7 @@ PrefabInstance:
     - target: {fileID: 7650844627614880312, guid: 2f7949e571087ce45b59ad38cfdd6377,
         type: 3}
       propertyPath: jumpHeight
-      value: 1.5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7650844627614880312, guid: 2f7949e571087ce45b59ad38cfdd6377,
         type: 3}
@@ -38039,6 +38021,11 @@ PrefabInstance:
         type: 3}
       propertyPath: playerShatterPrefab
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7650844627614880319, guid: 2f7949e571087ce45b59ad38cfdd6377,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7901560986477114838, guid: 2f7949e571087ce45b59ad38cfdd6377,
         type: 3}
@@ -38149,6 +38136,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8679461910673124398, guid: 2f7949e571087ce45b59ad38cfdd6377,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8735132887141275385, guid: 2f7949e571087ce45b59ad38cfdd6377,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1520501550837861194, guid: 2f7949e571087ce45b59ad38cfdd6377, type: 3}

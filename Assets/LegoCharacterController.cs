@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class LegoCharacterController : MonoBehaviour
 {
     public float moveSpeed = 6f;
@@ -12,16 +13,26 @@ public class LegoCharacterController : MonoBehaviour
     
     private float verticalVelocity;       // Håller koll på hoppet/fallet
 
+    [Header("Fotstegsljud")]
+    public AudioClip[] footstepSounds;    // Lista med fotstegsljud (varierar ljudet automatiskt)
+    public float stepInterval = 0.3f;     // Tid mellan varje steg när man springer
+    private float stepTimer;
+
     private Animator anime;
     private CharacterController controller;
+    private AudioSource audioSource;
     public Camera mainCamera;
     
     void Start()
     {
-      
         controller = GetComponent<CharacterController>();
         anime = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         
+        // Ställ in AudioSource för 3D-ljud
+        audioSource.spatialBlend = 1.0f;
+        audioSource.playOnAwake = false;
+
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
@@ -37,7 +48,6 @@ public class LegoCharacterController : MonoBehaviour
         {
             // Sätt en liten negativ kraft så spelaren hålls stadigt mot marken
             verticalVelocity = -2f;
-            
         }
 
         // 2. Hämta input för rörelse
@@ -46,8 +56,9 @@ public class LegoCharacterController : MonoBehaviour
         Vector3 inputDir = new Vector3(horizontal, 0f, vertical).normalized;
 
         Vector3 moveDirection = Vector3.zero;
+        bool isMoving = inputDir.sqrMagnitude > 0.01f; // Använd sqrMagnitude för säkrare beräkning i alla upplösningar
 
-        if (inputDir.magnitude >= 0.1f)
+        if (isMoving)
         {
             // Beräkna framåt/höger relativt kameran
             Vector3 cameraForward = mainCamera.transform.forward;
@@ -69,10 +80,18 @@ public class LegoCharacterController : MonoBehaviour
             }
 
             if (anime != null) anime.SetBool("Run", true);
+
+            // Spela fotstegsljud om spelaren faktiskt rör sig på marken
+            if (isGrounded)
+            {
+                HandleFootsteps();
+            }
         }
         else 
         {
             if (anime != null) anime.SetBool("Run", false);
+            // Återställ timern till intervallet så första steget spelas direkt när man börjar gå igen
+            stepTimer = stepInterval; 
         }
 
         // 3. Hantera Hopp (Space-knappen)
@@ -86,7 +105,6 @@ public class LegoCharacterController : MonoBehaviour
                 anime.SetTrigger("Jump"); // Valfritt: trigga Jump-animation om du har en
             }
         }
-       
 
         // 4. Lägg till tyngdkraft över tid
         verticalVelocity += gravity * Time.deltaTime;
@@ -94,6 +112,31 @@ public class LegoCharacterController : MonoBehaviour
         // 5. Kombinera horisontell och vertikal rörelse i ETT Move-anrop
         Vector3 finalVelocity = (moveDirection * moveSpeed) + (Vector3.up * verticalVelocity);
         controller.Move(finalVelocity * Time.deltaTime);
+    }
+
+    void HandleFootsteps()
+    {
+        stepTimer += Time.deltaTime;
+
+        if (stepTimer >= stepInterval)
+        {
+            if (footstepSounds != null && footstepSounds.Length > 0)
+            {
+                // Välj ett slumpmässigt ljud ur listan för mer naturlig känsla
+                int randomIndex = Random.Range(0, footstepSounds.Length);
+                AudioClip clip = footstepSounds[randomIndex];
+
+                if (clip != null)
+                {
+                    // Ändra tonhöjden obetydligt för variation
+                    audioSource.pitch = Random.Range(0.9f, 1.1f);
+                    audioSource.PlayOneShot(clip);
+                }
+          
+            }
+
+            stepTimer = 0f;
+        }
     }
 
     public bool HasEnemyInRange(Vector3 attackPosition, float attackRange, LayerMask enemyLayers)
