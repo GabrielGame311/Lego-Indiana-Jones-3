@@ -106,8 +106,7 @@ public class CharacterSwitcher : MonoBehaviour
     var p1Follow = player1.GetComponent<FollowCompanion>();
     var p2Follow = player2.GetComponent<FollowCompanion>();
 
-    var p1CC = player1.GetComponent<CharacterController>();
-    var p2CC = player2.GetComponent<CharacterController>();
+   
 
     var p1Health = player1.GetComponent<PlayerHealth>();
     var p2Health = player2.GetComponent<PlayerHealth>();
@@ -118,7 +117,7 @@ public class CharacterSwitcher : MonoBehaviour
     if (controlP1)
     {
         // --- SPELARE 1 AKTIVERAS ---
-        if (p1CC != null) p1CC.enabled = true;
+       
         if (p1Movement != null) p1Movement.enabled = true;
         if (p1Follow != null) p1Follow.enabled = false;
         if (p1Health != null) p1Health.isControlledByPlayer = true;
@@ -129,7 +128,7 @@ public class CharacterSwitcher : MonoBehaviour
         if (player1Indicator != null) player1Indicator.BlinkAndShow();
 
         // --- SPELARE 2 SLÄCKS ---
-        if (p2CC != null) p2CC.enabled = false;
+        
         if (p2Movement != null) p2Movement.enabled = false;
         if (p2Follow != null) p2Follow.SetTarget(player1.transform);
         if (p2Health != null) p2Health.isControlledByPlayer = false;
@@ -145,7 +144,7 @@ public class CharacterSwitcher : MonoBehaviour
     else
     {
         // --- SPELARE 2 AKTIVERAS ---
-        if (p2CC != null) p2CC.enabled = true;
+       
         if (p2Movement != null) p2Movement.enabled = true;
         if (p2Follow != null) p2Follow.enabled = false;
         if (p2Health != null) p2Health.isControlledByPlayer = true;
@@ -156,7 +155,7 @@ public class CharacterSwitcher : MonoBehaviour
         if (player2Indicator != null) player2Indicator.BlinkAndShow();
 
         // --- SPELARE 1 SLÄCKS ---
-        if (p1CC != null) p1CC.enabled = false;
+        
         if (p1Movement != null) p1Movement.enabled = false;
         if (p1Follow != null) p1Follow.SetTarget(player2.transform);
         if (p1Health != null) p1Health.isControlledByPlayer = false;

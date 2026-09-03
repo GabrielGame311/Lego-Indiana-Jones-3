@@ -14,7 +14,7 @@ public class PlayerAttack : MonoBehaviour
     public Transform attackPoint;      
     public float attackRange = 1.2f;    
     public int attackDamage = 1;       
-    public LayerMask enemyLayers;      
+    public LayerMask attackableLayers; // Välj både Enemy och Default/Destructible i Inspector!
 
     void Start()
     {
@@ -24,8 +24,8 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        // Slå manuellt endast om denna karaktär styrs av spelaren
-        if (isControlledByPlayer && Input.GetKeyDown(KeyCode.Mouse0) && HasEnemyInRange())
+        // Slå när spelaren klickar
+        if (isControlledByPlayer && Input.GetKeyDown(KeyCode.Mouse0))
         {
             if (anime != null)
             {
@@ -34,33 +34,28 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    private bool HasEnemyInRange()
-    {
-        Vector3 point = attackPoint != null ? attackPoint.position : transform.position + transform.forward * 1f;
-
-        if (characterController != null)
-        {
-            return characterController.HasEnemyInRange(point, attackRange, enemyLayers);
-        }
-
-        return Physics.OverlapSphere(point, attackRange, enemyLayers).Length > 0;
-    }
-
+    // Körs av Animation Event ELLER av FollowCompanion
     public void Attack() 
     {
-        // Om detta är följaren (inte spelaren), gör ingen skada på fienden!
-        if (!isControlledByPlayer) return;
-
         Vector3 point = attackPoint != null ? attackPoint.position : transform.position + transform.forward * 1f;
 
-        Collider[] hitEnemies = Physics.OverlapSphere(point, attackRange, enemyLayers);
+        // Hämta alla collider-objekt inom räckhåll på valda lager
+        Collider[] hitColliders = Physics.OverlapSphere(point, attackRange, attackableLayers);
 
-        foreach (Collider enemy in hitEnemies)
+        foreach (Collider hit in hitColliders)
         {
-            EnemyAI enemyAI = enemy.GetComponent<EnemyAI>();
+            // 1. Skada fiende
+            EnemyAI enemyAI = hit.GetComponentInParent<EnemyAI>();
             if (enemyAI != null)
             {
                 enemyAI.TakeDamage(attackDamage);
+            }
+
+            // 2. Skada förstörbart objekt (t.ex. låda/kruka)
+            DestructibleObject destructible = hit.GetComponentInParent<DestructibleObject>();
+            if (destructible != null)
+            {
+                destructible.TakeDamage(attackDamage);
             }
         }
     }

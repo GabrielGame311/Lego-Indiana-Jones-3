@@ -2273,9 +2273,9 @@ GameObject:
   - component: {fileID: 8939276550485742686}
   - component: {fileID: 8679461910673124398}
   - component: {fileID: 1520501550837861194}
-  - component: {fileID: 7350397803194657971}
   - component: {fileID: 4386405088488662481}
   - component: {fileID: 6763845812739743145}
+  - component: {fileID: 1932082318539975860}
   m_Layer: 9
   m_Name: Jones
   m_TagString: Player
@@ -2367,6 +2367,10 @@ MonoBehaviour:
   modelRotationOffset: 0
   jumpHeight: -6
   gravity: -40
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
   footstepSounds:
   - {fileID: 8300000, guid: 39948ec2175e749819ecd850a1d0e5af, type: 3}
   - {fileID: 8300000, guid: 97adc7a6316eb42039437d84c81b25c9, type: 3}
@@ -2390,7 +2394,8 @@ MonoBehaviour:
   currentHealth: 0
   healthUI: {fileID: 0}
   invincibilityTime: 1.5
-  playerShatterPrefab: {fileID: 0}
+  playerShatterPrefab: {fileID: 3682661644054021360, guid: bc1ce1c8d7d90b34496c4cd24db2fac9,
+    type: 3}
   respawnDelay: 2.5
   explosionForce: 5
   damageColor: {r: 1, g: 0, b: 0, a: 1}
@@ -2426,9 +2431,9 @@ MonoBehaviour:
   attackPoint: {fileID: 4934427074591166073}
   attackRange: 1.2
   attackDamage: 1
-  enemyLayers:
+  attackableLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 32832
 --- !u!136 &8679461910673124398
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2457,24 +2462,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followSpeed: 6
   stoppingDistance: 6
+  gravity: -19.62
   attackRange: 2
   attackRate: 1.5
---- !u!54 &7350397803194657971
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7416350475412172652}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 122
-  m_CollisionDetection: 0
 --- !u!114 &4386405088488662481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2584,6 +2574,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &1932082318539975860
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7416350475412172652}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &7574514353868357135
 GameObject:
   m_ObjectHideFlags: 0

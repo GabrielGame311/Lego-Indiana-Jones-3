@@ -20,12 +20,15 @@ public class EnemyAI : MonoBehaviour
     public GameObject enemyShatterPrefab;
     public float explosionForce = 4f;
     public float bulletSpeed = 20f;
-    
+    public AudioClip deathSound;
+    public AudioClip shootSound;
+    AudioSource audioSource;
     private Transform playerTarget;
     private Animator anime;
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         currentHealth = maxHealth;
         anime = GetComponent<Animator>();
         FindActivePlayer();
@@ -89,7 +92,7 @@ public class EnemyAI : MonoBehaviour
     void ShootAtPlayer()
     {
         if (enemyBulletPrefab == null || firePoint == null || playerTarget == null) return;
-
+        audioSource.PlayOneShot(shootSound);
         // Rikta firePoint mot den aktiva spelaren
         Vector3 direction = (playerTarget.position + Vector3.up * 1f) - firePoint.position;
         Quaternion bulletRotation = Quaternion.LookRotation(direction);
@@ -121,6 +124,10 @@ public class EnemyAI : MonoBehaviour
             foreach (Rigidbody rb in shatteredParts.GetComponentsInChildren<Rigidbody>())
             {
                 rb.AddExplosionForce(explosionForce, transform.position + Vector3.up * 0.5f, 2f, 1f, ForceMode.Impulse);
+                
+                audioSource.PlayOneShot(deathSound);
+
+                
                 Destroy(rb.gameObject, 3f);
             }
         }
